@@ -1,8 +1,8 @@
 # macOS Printer and CUPS Diagnostics Toolkit
 
-A read-only Bash toolkit for auditing CUPS services, printer queues, jobs, drivers, PPDs, sharing, connectivity, and recent printing errors.
+A macOS support toolkit for auditing and repairing common CUPS, printer queue and print-job problems.
 
-## Usage
+## Diagnostic script
 
 ```bash
 chmod +x src/macos_printer_diagnostics.sh
@@ -15,18 +15,54 @@ Test a printer host:
 sudo ./src/macos_printer_diagnostics.sh --printer-host 192.168.1.217 --port 9100
 ```
 
-## Checks performed
+## Repair script
 
-- CUPS daemon and launchd state
-- Configured printers, default printer, queues, and jobs
-- Printer URIs, drivers, PPDs, and CUPS configuration
-- Optional DNS, ping, IPP, and raw-print-port tests
-- Recent CUPS and print-service events
-- Text, CSV, and JSON reports
+Restart CUPS:
 
-## Safety
+```bash
+chmod +x src/macos_printer_repair.sh
+sudo ./src/macos_printer_repair.sh --restart-cups
+```
 
-The script never adds, removes, enables, disables, pauses, resumes, cancels, or modifies printers and jobs.
+Enable and resume one printer queue:
+
+```bash
+sudo ./src/macos_printer_repair.sh \
+  --printer Printer_Name \
+  --enable \
+  --resume
+```
+
+Cancel all jobs for one queue:
+
+```bash
+sudo ./src/macos_printer_repair.sh \
+  --printer Printer_Name \
+  --cancel-all
+```
+
+Set the default printer:
+
+```bash
+./src/macos_printer_repair.sh \
+  --printer Printer_Name \
+  --set-default
+```
+
+Use `--dry-run` to preview changes.
+
+## What the repair does
+
+- Restarts the CUPS printing service.
+- Enables a selected printer queue.
+- Resumes a selected queue.
+- Can cancel all jobs for one selected printer after confirmation.
+- Can set the default printer.
+- Writes logs and performs post-repair queue verification.
+
+## Safety and limitations
+
+The repair does not add or remove printers, change drivers or edit PPD files automatically. Cancelling jobs requires explicit confirmation. Driver, firmware, network and hardware faults may still require separate repair.
 
 ## Author
 
