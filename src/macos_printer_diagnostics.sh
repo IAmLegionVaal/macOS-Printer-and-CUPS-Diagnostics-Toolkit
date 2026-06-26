@@ -26,7 +26,7 @@ DEFAULT=$(/usr/bin/lpstat -d 2>/dev/null | sed 's/.*: //')
 /usr/bin/lpstat -v 2>/dev/null | while read -r _ printer _ uri; do
   printer=${printer%:}; state=$(/usr/bin/lpstat -p "$printer" 2>/dev/null | head -n1); accepting=$(/usr/bin/lpstat -a "$printer" 2>/dev/null | head -n1)
   is_default=false; [ "$printer" = "$DEFAULT" ] && is_default=true
-  printf '"%s","%s","%s","%s","%s"\n' "$printer" "$uri" "${state//"/""}" "${accepting//"/""}" "$is_default" >> "$CSV"
+  printf '"%s","%s","%s","%s","%s"\n' "$printer" "$uri" "${state//\"/\"\"}" "${accepting//\"/\"\"}" "$is_default" >> "$CSV"
 done
 HOST_REACHABLE=false; PORT_REACHABLE=false
 if [ -n "$PRINTER_HOST" ]; then

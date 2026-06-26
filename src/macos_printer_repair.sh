@@ -84,7 +84,7 @@ verify() {
   {
     echo "Collected: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "CUPS process:"
-    ps -Ao pid,user,etime,comm,args | grep -E '[c]upsd' || true
+    pgrep -lf 'cupsd' || true
     echo
     echo "Printers:"
     /usr/bin/lpstat -p -d 2>&1 || true
